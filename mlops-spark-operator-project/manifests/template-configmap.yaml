@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: template-configmap
+  namespace: mlops-spark-operator
+data:
+  NEXUS_URL: "https://nexus.example.com/repository/prod-raw-hosted"
+  HADOOP_ARCHIVE_NAME: "hadoop-latest.tar.gz"

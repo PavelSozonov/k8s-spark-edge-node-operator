@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sparknotebook-webhook
+  namespace: mlops-spark-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sparknotebook-webhook
+  template:
+    metadata:
+      labels:
+        app: sparknotebook-webhook
+    spec:
+      containers:
+        - name: webhook
+          image: mlops-spark-webhook
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - name: webhook-tls
+              mountPath: /etc/tls
+              readOnly: true
+      volumes:
+        - name: webhook-tls
+          secret:
+            secretName: webhook-tls-secret

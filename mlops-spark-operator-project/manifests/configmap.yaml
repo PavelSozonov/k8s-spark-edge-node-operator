@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mlops-spark-operator-config
+  namespace: mlops-spark-operator
+data:
+  max-id: "5"           # Maximum ID for SparkNotebooks
+  initial-port: "8100"   # Starting port for the first SparkNotebook

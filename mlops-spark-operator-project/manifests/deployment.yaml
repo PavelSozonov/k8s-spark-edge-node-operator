@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-spark-operator
+  namespace: mlops-spark-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlops-spark-operator
+  template:
+    metadata:
+      labels:
+        app: mlops-spark-operator
+    spec:
+      containers:
+        - name: operator
+          image: mlops-spark-operator
+          ports:
+            - containerPort: 8080

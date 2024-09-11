@@ -1,0 +1,50 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: sparknotebooks.mlops.example.com
+spec:
+  group: mlops.example.com
+  names:
+    kind: SparkNotebook
+    listKind: SparkNotebookList
+    plural: sparknotebooks
+    singular: sparknotebook
+    shortNames:
+      - sparknb
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  minimum: 0
+                  maximum: 1000
+            status:
+              type: object
+              properties:
+                ports:
+                  type: array
+                  items:
+                    type: integer
+                  description: "Three consecutive ports assigned to this SparkNotebook"
+      additionalPrinterColumns:
+        - name: ID
+          type: integer
+          jsonPath: .spec.id
+          description: "ID of the SparkNotebook"
+        - name: Ports
+          type: string
+          jsonPath: .status.ports
+          description: "Assigned Ports"
+        - name: AGE
+          type: date
+          jsonPath: .metadata.creationTimestamp
+          description: "Age of the SparkNotebook resource"

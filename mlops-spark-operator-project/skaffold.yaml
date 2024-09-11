@@ -1,0 +1,24 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+metadata:
+  name: mlops-spark-operator
+build:
+  artifacts:
+  - image: mlops-spark-operator
+    context: operator
+    docker:
+      dockerfile: Dockerfile
+  - image: mlops-spark-webhook
+    context: webhook
+    docker:
+      dockerfile: Dockerfile
+manifests:
+  rawYaml:
+    - manifests/namespace.yaml
+    - manifests/sparknotebook-crd.yaml
+    - manifests/rbac.yaml
+    - manifests/configmap.yaml
+    - manifests/deployment.yaml
+    - manifests/webhook-deployment.yaml
+    - manifests/template-configmap.yaml
+    - manifests/webhook-tls-secret.yaml

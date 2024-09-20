@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlops-spark-operator
+  namespace: mlops-spark-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlops-spark-operator
+  template:
+    metadata:
+      labels:
+        app: mlops-spark-operator
+    spec:
+      serviceAccountName: mlops-spark-operator
+      containers:
+      - name: mlops-spark-operator
+        image: mlops-spark-operator:latest
+        imagePullPolicy: IfNotPresent

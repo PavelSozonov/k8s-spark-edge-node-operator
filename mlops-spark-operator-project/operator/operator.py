@@ -8,24 +8,19 @@ from utils import (
     get_template_configmap,
     create_config_map,
     delete_config_map,
+    patch_sparknotebook_status,
+    CRD_GROUP,
+    CRD_VERSION,
+    CRD_PLURAL,
 )
 
-# CRD Details
-CRD_GROUP = "mlops.example.com"
-CRD_VERSION = "v1"
-CRD_PLURAL = "sparknotebooks"
 
-def patch_sparknotebook_status(api, name, namespace, patch_body):
-    """Patch the status of the SparkNotebook CRD."""
-    try:
-        api.patch_namespaced_custom_object(
-            CRD_GROUP, CRD_VERSION, namespace, CRD_PLURAL, name, patch_body
-        )
-    except ApiException as e:
-        if e.status == 404:
-            kopf.info(f"SparkNotebook {name} not found in namespace {namespace}, skipping patch.", reason="NotFound")
-        else:
-            raise e
+# Prevent event sourcing on kopf.info messages
+@kopf.on.startup()
+def configure(settings: kopf.OperatorSettings, **_):
+    settings.posting.enabled = False
+    #clusterwide = True
+
 
 @kopf.on.create(CRD_GROUP, CRD_VERSION, CRD_PLURAL)
 def create_fn(spec, name, namespace, **kwargs):
@@ -50,13 +45,11 @@ def create_fn(spec, name, namespace, **kwargs):
     }
     patch_sparknotebook_status(CustomObjectsApi(), name, namespace, patch_body)
 
-    # Fetch the template for ConfigMap
-    template_configmap = get_template_configmap()
-
     # Create the new ConfigMap based on the template
-    create_config_map(name, namespace, template_configmap)
+    create_config_map(name, namespace)
 
     kopf.info(f"Assigned ID {next_id} and ports {assigned_ports} to SparkNotebook {name} in namespace {namespace}", reason="Created")
+
 
 @kopf.on.delete(CRD_GROUP, CRD_VERSION, CRD_PLURAL)
 def delete_fn(spec, name, namespace, **kwargs):

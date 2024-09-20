@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mlops-spark-operator-config
+  namespace: mlops-spark-operator
+data:
+  max-id: "20"         # Default max id is set to 20
+  initial-port: "8100"  # Default initial port is set to 8100

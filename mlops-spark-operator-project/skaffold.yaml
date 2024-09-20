@@ -20,5 +20,4 @@ manifests:
     - manifests/configmap.yaml
     - manifests/deployment.yaml
     - manifests/webhook-deployment.yaml
-    - manifests/template-configmap.yaml
     - manifests/webhook-tls-secret.yaml

@@ -1,0 +1,6 @@
+apiVersion: mlops.example.com/v1
+kind: SparkNotebook
+metadata:
+  name: test-notebook
+  namespace: mlops-spark-operator
+spec: {}
